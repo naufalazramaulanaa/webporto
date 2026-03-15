@@ -108,10 +108,7 @@ export default async function Home() {
         )}
       </section>
 
-      {/* Footer Simple */}
-      <footer className="py-12 text-center text-gray-400 text-sm font-light">
-        © {new Date().getFullYear()} Naufal Azra. Built with Next.js & 💙 for Barca.
-      </footer>
+      
     </main>
   );
 }
