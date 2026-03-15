@@ -1,65 +1,71 @@
-import Image from "next/image";
+import { supabase } from '@/lib/supabase';
+import { Reveal } from '@/components/Reveal';
 
-export default function Home() {
+async function getProjects() {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) return [];
+  return data;
+}
+
+export default async function Home() {
+  const projects = await getProjects();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-barca-blue via-barca-dark to-barca-garnet py-20 px-6 text-white text-center">
+        <Reveal>
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+            Naufal Azra <span className="text-barca-gold">Maulana</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto font-light">
+            Informatics Engineering Student & Full-stack Developer.
           </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <button className="bg-barca-gold text-barca-blue px-8 py-3 rounded-full font-bold hover:scale-105 transition shadow-lg">
+              My Projects
+            </button>
+            <button className="border border-white/30 backdrop-blur-md px-8 py-3 rounded-full hover:bg-white/10 transition">
+              Contact Me
+            </button>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Projects Grid */}
+      <section className="max-w-6xl mx-auto py-16 px-6">
+        <Reveal>
+          <h2 className="text-3xl font-bold mb-12 border-l-8 border-barca-garnet pl-4 text-barca-blue">
+            Featured Projects
+          </h2>
+        </Reveal>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <Reveal key={project.id}>
+              <div className="group bg-white rounded-2xl shadow-lg overflow-hidden border-b-4 border-transparent hover:border-barca-gold transition-all duration-300">
+                <div className="h-48 bg-gray-200 relative">
+                  <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-barca-blue mb-2">{project.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech_stack?.map((tech: string) => (
+                      <span key={tech} className="text-[10px] font-bold px-2 py-1 bg-blue-50 text-barca-blue rounded border border-blue-100">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
