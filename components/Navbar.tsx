@@ -118,12 +118,12 @@ export default function Navbar() {
         ) : (
           <>
             <Link href="/" className="hover:text-[#dbbb3d] transition">Home</Link>
-            <Link 
+            {/* <Link 
               href="/login" 
               className="bg-[#dbbb3d] text-[#004d98] px-6 py-2 rounded-xl hover:bg-yellow-500 transition-all shadow-lg text-sm uppercase tracking-widest font-black"
             >
               LOGIN
-            </Link>
+            </Link> */}
           </>
         )}
       </div>
